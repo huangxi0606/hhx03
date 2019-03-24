@@ -1,0 +1,9 @@
+<!--welcome.wxml--><!-- wxml是编写小程序骨架的文件 --><!-- 只有在text里的文字才可以在手机上长按选中 -->
+<view class="container">
+  <image class='user-avatar' src="/images/avatar/5.png">
+  </image>
+  <text class="user-name">Hi,<text style='color:green'>三月</text></text>
+  <view class="moto-container">
+    <text class="moto">开启小程序之旅</text>
+  </view>
+</view>
