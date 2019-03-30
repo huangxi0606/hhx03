@@ -1,13 +1,15 @@
 {
   "pages":[
-    "pages/welcome/welcome",
+    "pages/posts/post-detail/post-detail",
+    
     "pages/posts/post",
+    "pages/welcome/welcome",
     "pages/index/index",
     "pages/logs/logs"
   ],
   "window":{
     "backgroundTextStyle":"light",
-    "navigationBarBackgroundColor": "#b3d4db",
+    "navigationBarBackgroundColor": "#405f80",
     "navigationBarTitleText": "hhx",
     "navigationBarTextStyle":"white"
   }
