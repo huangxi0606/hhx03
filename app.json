@@ -13,5 +13,8 @@
     "navigationBarBackgroundColor": "#405f80",
     "navigationBarTitleText": "hhx",
     "navigationBarTextStyle":"white"
-  }
+  },
+  "requiredBackgroundModes": [
+    "audio"
+  ]
 }
