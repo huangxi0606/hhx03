@@ -33,7 +33,12 @@ App({
       }
     })
   },
+  
+   
   globalData: {
-    userInfo: null
+    userInfo: null,
+    g_isPlayingMusic: false,
+    g_currentMusicPostId: null,
+    doubanBase: "https://api.douban.com",
   }
 })
