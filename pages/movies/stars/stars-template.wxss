@@ -11,13 +11,16 @@
   margin-top: 6rpx;
 }
 
-.stars-image {
+.stars image {
   padding-left: 3rpx;
   height: 17rpx;
   width: 17rpx;
 }
 
 .star-score{
+   color: #1f3463;
   
-  color: #1f3463;
+}
+text{
+  font-size: 21rpx;
 }
