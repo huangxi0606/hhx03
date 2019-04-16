@@ -127,6 +127,13 @@ Page({
       url: "more-movie/more-movie?category=" + category
     })
   },
+
+  onMovieTap: function (event) {
+    var movieId = event.currentTarget.dataset.movieid;
+    wx.navigateTo({
+      url: "movie-detail/movie-detail?id=" + movieId
+    })
+  },
   
   onBindFocus: function (event) {
     this.setData({
@@ -139,5 +146,14 @@ Page({
     var text = event.detail.value;
     var searchUrl = app.globalData.doubanBase + "/v2/movie/search?q=" + text;
     this.getMovieListData(searchUrl, "searchResult", "");
+  },
+
+  onCancelImgTap: function (event) {
+    this.setData({
+      containerShow: true,
+      searchPanelShow: false,
+      searchResult: {}
+    }
+    )
   },
 })

@@ -1,37 +1,30 @@
 var postsData = require('../../../data/posts-data.js')
 var app = getApp();
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     isPlayingMusic: false
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function(options) {
-    var postId = options.id;
-    // console.log(postId);
+  onLoad: function (option) {
+    var postId = option.id;
     this.data.currentPostId = postId;
     var postData = postsData.postList[postId];
     this.setData({
       postData: postData
     })
-    
+
     var postsCollected = wx.getStorageSync('posts_collected')
     if (postsCollected) {
       var postCollected = postsCollected[postId]
       this.setData({
         collected: postCollected
       })
-    } else {
+    }
+    else {
       var postsCollected = {};
       postsCollected[postId] = false;
       wx.setStorageSync('posts_collected', postsCollected);
     }
+
     if (app.globalData.g_isPlayingMusic && app.globalData.g_currentMusicPostId
       === postId) {
       this.setData({
@@ -40,9 +33,7 @@ Page({
     }
     this.setMusicMonitor();
   },
-  /**
-   * 
-   */
+
   setMusicMonitor: function () {
     //点击播放图标和总控开关都会触发这个函数
     var that = this;
@@ -75,7 +66,6 @@ Page({
         }
       }
       app.globalData.g_isPlayingMusic = false;
-      // app.globalData.g_currentMusicPostId = null;
     });
     wx.onBackgroundAudioStop(function () {
       that.setData({
@@ -85,35 +75,28 @@ Page({
       // app.globalData.g_currentMusicPostId = null;
     });
   },
-  /**
-   * 收藏文章
-   */
-  onColletionTap: function(event) {
+
+  onColletionTap: function (event) {
     // this.getPostsCollectedSyc();
     this.getPostsCollectedAsy();
   },
-  /**
-   * 异步
-   */
-  getPostsCollectedAsy: function() {
+
+  getPostsCollectedAsy: function () {
     var that = this;
     wx.getStorage({
       key: "posts_collected",
-      success: function(res) {
+      success: function (res) {
         var postsCollected = res.data;
         var postCollected = postsCollected[that.data.currentPostId];
         // 收藏变成未收藏，未收藏变成收藏
         postCollected = !postCollected;
         postsCollected[that.data.currentPostId] = postCollected;
-        that.showModal(postsCollected, postCollected);
+        that.showToast(postsCollected, postCollected);
       }
     })
   },
-  /**
-   * 同步
-   */
-  getPostsCollectedSyc: function() {
-    //当前文章id是否被收藏
+
+  getPostsCollectedSyc: function () {
     var postsCollected = wx.getStorageSync('posts_collected');
     var postCollected = postsCollected[this.data.currentPostId];
     // 收藏变成未收藏，未收藏变成收藏
@@ -121,25 +104,7 @@ Page({
     postsCollected[this.data.currentPostId] = postCollected;
     this.showToast(postsCollected, postCollected);
   },
-  /**
-   * 提示
-   */
-  showToast: function (postsCollected, postCollected) {
-    // 更新文章是否的缓存值
-    wx.setStorageSync('posts_collected', postsCollected);
-    // 更新数据绑定变量，从而实现切换图片
-    this.setData({
-      collected: postCollected
-    })
-    wx.showToast({
-      title: postCollected ? "收藏成功" : "取消成功",
-      duration: 1000,
-      icon: "success"
-    })
-  },
-  /**
-   * 提示加确认
-   */
+
   showModal: function (postsCollected, postCollected) {
     var that = this;
     wx.showModal({
@@ -161,9 +126,21 @@ Page({
       }
     })
   },
-  /**
-   * 分享
-   */
+
+  showToast: function (postsCollected, postCollected) {
+    // 更新文章是否的缓存值
+    wx.setStorageSync('posts_collected', postsCollected);
+    // 更新数据绑定变量，从而实现切换图片
+    this.setData({
+      collected: postCollected
+    })
+    wx.showToast({
+      title: postCollected ? "收藏成功" : "取消成功",
+      duration: 1000,
+      icon: "success"
+    })
+  },
+
   onShareTap: function (event) {
     var itemList = [
       "分享给微信好友",
@@ -184,13 +161,7 @@ Page({
       }
     })
   },
-  // onShareAppMessage: function (event) {
-  //   return {
-  //     title: '离思五首·其四',
-  //     desc: '曾经沧海难为水，除却巫山不是云',
-  //     path: '/pages/posts/post-detail/post-detail?id=0'
-  //   }
-  // }
+
   onMusicTap: function (event) {
     var currentPostId = this.data.currentPostId;
     var postData = postsData.postList[currentPostId];
@@ -204,11 +175,17 @@ Page({
       app.globalData.g_isPlayingMusic = false;
     }
     else {
+      console.log(postData.music.url);
+      wx.playVoice({
+        filePath: postData.music.url,
+        complete() { }
+      })
       wx.playBackgroundAudio({
         dataUrl: postData.music.url,
         title: postData.music.title,
         coverImgUrl: postData.music.coverImg,
       })
+      
       this.setData({
         isPlayingMusic: true
       })
@@ -216,4 +193,16 @@ Page({
       app.globalData.g_isPlayingMusic = true;
     }
   },
+
+  /*
+  * 定义页面分享函数
+  */
+  onShareAppMessage: function (event) {
+    return {
+      title: '离思五首·其四',
+      desc: '曾经沧海难为水，除却巫山不是云',
+      path: '/pages/posts/post-detail/post-detail?id=0'
+    }
+  }
+
 })
